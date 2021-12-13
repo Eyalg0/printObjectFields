@@ -30,11 +30,11 @@ public class Main {
 	
 	public static String printObj(Object classz, StringBuilder space) throws Exception {
 		if (objectsPrinted.contains(classz)) {
-			return "already printed";
+			return space.append("already printed").toString();
 		}
 		objectsPrinted.add(classz);
 		if (classz == null) {
-	        return "null";
+	        return space.append("null").toString();
 		}
 
 	    if (LEAVES.contains(classz.getClass())) {
@@ -53,10 +53,11 @@ public class Main {
 	    space.append("	"); 
 		Field[] declaredFields = classz.getClass().getDeclaredFields();
 		for (Field field : declaredFields) {
-			if (field.getType().isPrimitive() || LEAVES.contains(field.getType())) {
-				sb.append(space).append(field.getName()).append(": ");
+			sb.append(space).append(field.getName()).append(": ");
+			if (!field.getType().isPrimitive() && !LEAVES.contains(field.getType())) {
+				sb.append(System.getProperty("line.separator"));
 			}
-	        sb.append(printObj(field.get(classz), new StringBuilder(space))).append(" ");
+			sb.append(printObj(field.get(classz), new StringBuilder(space))).append(" ");
 	        sb.append(System.getProperty("line.separator"));
 		}
 		return sb.toString();
